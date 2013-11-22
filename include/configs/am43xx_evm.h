@@ -137,9 +137,23 @@
 		"if test $fdtfile = undefined; then " \
 			"echo WARNING: Could not determine device tree; fi; \0"
 
-#define CONFIG_BOOTCOMMAND \
-	"run findfdt; " \
-	"run mmcboot;"
+#ifdef CONFIG_MMC
+#define BOOT_TARGETS_MMC "mmc0"
+#else
+#define BOOT_TARGETS_MMC ""
+#endif
+
+#ifdef CONFIG_USB_HOST
+#define BOOT_TARGETS_USB "usb"
+#else
+#define BOOT_TARGETS_USB ""
+#endif
+
+#ifdef CONFIG_NAND
+#define BOOT_TARGETS_NAND "nand"
+#else
+#define BOOT_TARGETS_NAND ""
+#endif
 
 #endif
 #endif	/* __CONFIG_AM43XX_EVM_H */
