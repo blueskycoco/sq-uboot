@@ -238,6 +238,209 @@ static struct module_pin_mux bone_norcape_pin_mux[] = {
 	{-1},
 };
 #endif
+#if defined(CONFIG_SQ)
+static struct module_pin_mux sq_pin_mux[] = {
+	/*LCD*/
+	{OFFSET(lcd_data0), MODE(0) | PULLUDEN}, 				/* LCD_DATA0 */
+	{OFFSET(lcd_data1), MODE(0) | PULLUDEN}, 				/* LCD_DATA1 */
+	{OFFSET(lcd_data2), MODE(0) | PULLUDEN}, 				/* LCD_DATA2 */
+	{OFFSET(lcd_data3), MODE(0) | PULLUDEN}, 				/* LCD_DATA3 */
+	{OFFSET(lcd_data4), MODE(0) | PULLUDEN}, 				/* LCD_DATA4 */
+	{OFFSET(lcd_data5), MODE(0) | PULLUDEN}, 				/* LCD_DATA5 */
+	{OFFSET(lcd_data6), MODE(0) | PULLUDEN}, 				/* LCD_DATA6 */
+	{OFFSET(lcd_data7), MODE(0) | PULLUDEN}, 				/* LCD_DATA7 */
+	{OFFSET(lcd_vsync), MODE(0)}, 							/* LCD_VSYNC */
+	{OFFSET(lcd_hsync), MODE(0)}, 							/* LCD_HSYNC */
+	{OFFSET(lcd_pclk), MODE(0)},							/* LCD_PCLK */
+	{OFFSET(lcd_ac_bias_en), MODE(0)}, 						/* LCD_AC_BIAS_EN */
+	{OFFSET(lcd_data8), MODE(0) | PULLUDEN}, 				/* LCD_DATA8 */
+	{OFFSET(lcd_data9), MODE(0) | PULLUDEN}, 				/* LCD_DATA9 */
+	{OFFSET(lcd_data10), MODE(0) | PULLUDEN},				/* LCD_DATA10 */
+	{OFFSET(lcd_data11), MODE(0) | PULLUDEN},				/* LCD_DATA11 */
+	{OFFSET(lcd_data12), MODE(0) | PULLUDEN},				/* LCD_DATA12 */
+	{OFFSET(lcd_data13), MODE(0) | PULLUDEN},				/* LCD_DATA13 */
+	{OFFSET(lcd_data14), MODE(0) | PULLUDEN},				/* LCD_DATA14 */
+	{OFFSET(lcd_data15), MODE(0) | PULLUDEN},				/* LCD_DATA15 */	
+	{OFFSET(gpmc_ad14), MODE(1)}, 							/* LCD_DATA22 */
+	{OFFSET(gpmc_ad15), MODE(1)}, 							/* LCD_DATA23 */
+	/*NAND*/
+	{OFFSET(gpmc_ad0), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD0 */
+	{OFFSET(gpmc_ad1), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD1 */
+	{OFFSET(gpmc_ad2), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD2 */
+	{OFFSET(gpmc_ad3), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD3 */
+	{OFFSET(gpmc_ad4), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD4 */
+	{OFFSET(gpmc_ad5), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD5 */
+	{OFFSET(gpmc_ad6), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD6 */
+	{OFFSET(gpmc_ad7), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD7 */
+	{OFFSET(gpmc_wait0), (MODE(0) | RXACTIVE | PULLUP_EN)}, /* NAND WAIT */
+	{OFFSET(gpmc_wpn), (MODE(7) | PULLUP_EN | RXACTIVE)},	/* NAND_WPN */
+	{OFFSET(gpmc_csn0), (MODE(0) | PULLUDEN)},				/* NAND_CS0 */
+	{OFFSET(gpmc_advn_ale), (MODE(0) | PULLUDEN)}, 			/* NAND_ADV_ALE */
+	{OFFSET(gpmc_oen_ren), (MODE(0) | PULLUDEN)},			/* NAND_OE */
+	{OFFSET(gpmc_wen), (MODE(0) | PULLUDEN)},				/* NAND_WEN */
+	{OFFSET(gpmc_be0n_cle), (MODE(0) | PULLUDEN)},			/* NAND_BE_CLE */
+	/*MMC0*/
+	{OFFSET(mmc0_dat3), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT3 */
+	{OFFSET(mmc0_dat2), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT2 */
+	{OFFSET(mmc0_dat1), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT1 */
+	{OFFSET(mmc0_dat0), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT0 */
+	{OFFSET(mmc0_clk), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_CLK */
+	{OFFSET(mmc0_cmd), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_CMD */
+	{OFFSET(mcasp0_aclkr), (MODE(4) | RXACTIVE)},			/* MMC0_WP */
+	/*RGMII0*/
+	{OFFSET(mii1_txen), MODE(2)},							/* RGMII1_TCTL */
+	{OFFSET(mii1_rxdv), MODE(2) | RXACTIVE},				/* RGMII1_RCTL */
+	{OFFSET(mii1_txd3), MODE(2)},							/* RGMII1_TD3 */
+	{OFFSET(mii1_txd2), MODE(2)},							/* RGMII1_TD2 */
+	{OFFSET(mii1_txd1), MODE(2)},							/* RGMII1_TD1 */
+	{OFFSET(mii1_txd0), MODE(2)},							/* RGMII1_TD0 */
+	{OFFSET(mii1_txclk), MODE(2)},							/* RGMII1_TCLK */
+	{OFFSET(mii1_rxclk), MODE(2) | RXACTIVE},				/* RGMII1_RCLK */
+	{OFFSET(mii1_rxd3), MODE(2) | RXACTIVE},				/* RGMII1_RD3 */
+	{OFFSET(mii1_rxd2), MODE(2) | RXACTIVE},				/* RGMII1_RD2 */
+	{OFFSET(mii1_rxd1), MODE(2) | RXACTIVE},				/* RGMII1_RD1 */
+	{OFFSET(mii1_rxd0), MODE(2) | RXACTIVE},				/* RGMII1_RD0 */
+	{OFFSET(mdio_data), MODE(0) | RXACTIVE | PULLUP_EN},	/* MDIO_DATA */
+	{OFFSET(mdio_clk), MODE(0) | PULLUP_EN},				/* MDIO_CLK */
+	/*USB0*/
+	{OFFSET(usb0_drvvbus), MODE(0)},						/* USB0_DRVVBUS */
+	/*USB1*/
+	{OFFSET(usb1_drvvbus), MODE(0)},						/* USB0_DRVVBUS */
+	/*ADC*/
+	{OFFSET(ain0), MODE(0) | RXACTIVE},						/* AIN0 */
+	{OFFSET(ain1), MODE(0) | RXACTIVE},						/* AIN1 */
+	{OFFSET(ain2), MODE(0) | RXACTIVE},						/* AIN2 */
+	{OFFSET(ain3), MODE(0) | RXACTIVE},						/* AIN3 */
+	{OFFSET(ain4), MODE(0) | RXACTIVE},						/* AIN4 */
+	{OFFSET(ain5), MODE(0) | RXACTIVE},						/* AIN5 */
+	{OFFSET(vrefp), MODE(0) | RXACTIVE},					/* VREFP */
+	{OFFSET(vrefn), MODE(0) | RXACTIVE},					/* VREFN */
+	/*MISC*/
+	{OFFSET(ecap0_in_pwm0_out), MODE(0)},					/* BUZZER */
+	{OFFSET(gpmc_a0), MODE(7)},								/* GPIO1_21 */
+	{OFFSET(gpmc_a1), MODE(7)},								/* GPIO1_22 */
+	{OFFSET(gpmc_a2), MODE(7)},								/* GPIO1_30 */
+	{OFFSET(gpmc_a3), MODE(7)},								/* GPIO1_31 */
+	{OFFSET(gpmc_a4), MODE(7)},								/* GPIO0_22 */
+	{OFFSET(gpmc_a5), MODE(7)},								/* GPIO1_26 */
+	{OFFSET(gpmc_a6), MODE(7)},								/* GPIO1_27 */
+	{OFFSET(gpmc_a7), MODE(7)},								/* GPIO0_2 */
+	{OFFSET(gpmc_a8), MODE(7)},								/* GPIO0_3 */
+	{OFFSET(gpmc_a9), MODE(7)},								/* GPIO3_19 */
+	{OFFSET(gpmc_a10), MODE(7)},							/* LED0 */
+	{OFFSET(gpmc_a11), MODE(7)},							/* LED1 */
+	{OFFSET(uart0_rtsn), MODE(7)|RXACTIVE|PULLUDDIS},		/* GPIO1_9 SDA */
+	{OFFSET(uart0_ctsn), MODE(7)},							/* GPIO1_8 SCL */
+	{OFFSET(mii1_rxerr), MODE(7)|RXACTIVE|PULLUDDIS},		/* GPIO0_7 SDA */
+	{OFFSET(mii1_crs), MODE(7)},							/* GPIO0_6 SCL */
+	{OFFSET(mcasp0_fsr), MODE(7)},							/* GPIO3_19 	115 	SYSTEM_PWR_EN */
+	{OFFSET(xdma_event_intr0), MODE(7)|RXACTIVE|PULLUP_EN},	/* GPIO0_19 	19	PWR_ON_OFF */
+	{OFFSET(mcasp0_ahclkx), MODE(7)},						/* GPIO3_21 	117  BK_PWR_ON */
+	{OFFSET(mcasp0_aclkx), MODE(7)},						/* GPIO3_14  110	 BK_PWR_PWM1 */
+	{OFFSET(mcasp0_axr0), MODE(7)},							/* GPIO3_16 	112	 LCD_PWRDWN */
+	{OFFSET(gpmc_ad12), MODE(7)},							/* GPIO1_12	44	 LVDS_PWR_ON */
+	{OFFSET(gpmc_ad9), MODE(7)},							/* GPIO0_23	23	 LCD_PWR_ON */
+	{OFFSET(mii1_crs), MODE(7)},							/* GPIO3_1	 97 RXD */
+	{OFFSET(spi0_cs1), MODE(7)},							/* GPIO0_6 	6	DC5V_PWR_EN */
+	{OFFSET(spi0_d1), MODE(7)},								/* GPIO0_4 	4	BATT_nCHGF GREEN_CHARGE_LED */
+	{OFFSET(spi0_cs0), MODE(7)},							/* GPIO0_5 	5	SLEEP_LED GREEN_SLEEP_LED */
+	{OFFSET(mcasp0_axr1), MODE(7)},							/* GPIO3_20 	116	SYS_LED GREEN_SYS_LED */
+	{OFFSET(gpmc_ad13), MODE(7)|RXACTIVE|PULLUDDIS},		/* GPIO1_13 	45	BATT_nCHG BATT_CHG_FLAG */		
+	{OFFSET(uart1_rtsn), MODE(7)},							/* GPIO0_13 	13	MMC_PWR_ON */
+	{OFFSET(uart1_ctsn), MODE(7)},							/* GPIO0_12 	12	EXT_PWR_ON */
+	{OFFSET(mii1_col), MODE(7)|RXACTIVE|PULLUDDIS},			/* GPIO3_0 	96	SFP_LOS */
+	{OFFSET(gpmc_ad11), MODE(7)},							/* GPIO0_27	27	 nFLAG_USB */
+	{OFFSET(gpmc_ad10), MODE(7)},							/* GPIO0_26	26	 ADC_PWR_ON */
+	{OFFSET(gpmc_ad8), MODE(7)},							/* GPIO0_22	22	 88E1111_RESET */
+	{OFFSET(gpmc_be1n), MODE(7)|RXACTIVE|PULLUP_EN},		/* GPIO0_19 	19	PWR_ON_OFF */
+	{-1},
+};
+#endif
+#if defined(CONFIG_DEVKIT8600)
+static struct module_pin_mux devkit8600_pin_mux[] = {
+
+	{OFFSET(lcd_data0), MODE(0) | PULLUDEN}, 				/* LCD_DATA0 */
+	{OFFSET(lcd_data1), MODE(0) | PULLUDEN}, 				/* LCD_DATA1 */
+	{OFFSET(lcd_data2), MODE(0) | PULLUDEN}, 				/* LCD_DATA2 */
+	{OFFSET(lcd_data3), MODE(0) | PULLUDEN}, 				/* LCD_DATA3 */
+	{OFFSET(lcd_data4), MODE(0) | PULLUDEN}, 				/* LCD_DATA4 */
+	{OFFSET(lcd_data5), MODE(0) | PULLUDEN}, 				/* LCD_DATA5 */
+	{OFFSET(lcd_data6), MODE(0) | PULLUDEN}, 				/* LCD_DATA6 */
+	{OFFSET(lcd_data7), MODE(0) | PULLUDEN}, 				/* LCD_DATA7 */
+	{OFFSET(lcd_vsync), MODE(0)}, 							/* LCD_VSYNC */
+	{OFFSET(lcd_hsync), MODE(0)}, 							/* LCD_HSYNC */
+	{OFFSET(lcd_pclk), MODE(0)},							/* LCD_PCLK */
+	{OFFSET(lcd_ac_bias_en), MODE(0)}, 						/* LCD_AC_BIAS_EN */
+	{OFFSET(lcd_data8), MODE(0) | PULLUDEN}, 				/* LCD_DATA8 */
+	{OFFSET(lcd_data9), MODE(0) | PULLUDEN}, 				/* LCD_DATA9 */
+	{OFFSET(lcd_data10), MODE(0) | PULLUDEN},				/* LCD_DATA10 */
+	{OFFSET(lcd_data11), MODE(0) | PULLUDEN},				/* LCD_DATA11 */
+	{OFFSET(lcd_data12), MODE(0) | PULLUDEN},				/* LCD_DATA12 */
+	{OFFSET(lcd_data13), MODE(0) | PULLUDEN},				/* LCD_DATA13 */
+	{OFFSET(lcd_data14), MODE(0) | PULLUDEN},				/* LCD_DATA14 */
+	{OFFSET(lcd_data15), MODE(0) | PULLUDEN},				/* LCD_DATA15 */	
+	{OFFSET(gpmc_ad14), MODE(1)}, 							/* LCD_DATA22 */
+	{OFFSET(gpmc_ad15), MODE(1)}, 							/* LCD_DATA23 */
+	/*NAND*/
+	{OFFSET(gpmc_ad0), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD0 */
+	{OFFSET(gpmc_ad1), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD1 */
+	{OFFSET(gpmc_ad2), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD2 */
+	{OFFSET(gpmc_ad3), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD3 */
+	{OFFSET(gpmc_ad4), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD4 */
+	{OFFSET(gpmc_ad5), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD5 */
+	{OFFSET(gpmc_ad6), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD6 */
+	{OFFSET(gpmc_ad7), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD7 */
+	{OFFSET(gpmc_wait0), (MODE(0) | RXACTIVE | PULLUP_EN)}, /* NAND WAIT */
+	{OFFSET(gpmc_wpn), (MODE(7) | PULLUP_EN | RXACTIVE)},	/* NAND_WPN */
+	{OFFSET(gpmc_csn0), (MODE(0) | PULLUDEN)},				/* NAND_CS0 */
+	{OFFSET(gpmc_advn_ale), (MODE(0) | PULLUDEN)}, 			/* NAND_ADV_ALE */
+	{OFFSET(gpmc_oen_ren), (MODE(0) | PULLUDEN)},			/* NAND_OE */
+	{OFFSET(gpmc_wen), (MODE(0) | PULLUDEN)},				/* NAND_WEN */
+	{OFFSET(gpmc_be0n_cle), (MODE(0) | PULLUDEN)},			/* NAND_BE_CLE */
+	/*MMC0*/
+	{OFFSET(mmc0_dat3), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT3 */
+	{OFFSET(mmc0_dat2), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT2 */
+	{OFFSET(mmc0_dat1), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT1 */
+	{OFFSET(mmc0_dat0), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT0 */
+	{OFFSET(mmc0_clk), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_CLK */
+	{OFFSET(mmc0_cmd), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_CMD */
+	{OFFSET(mcasp0_aclkr), (MODE(4) | RXACTIVE)},			/* MMC0_WP */
+	/*RGMII0*/
+	{OFFSET(mii1_txen), MODE(2)},							/* RGMII1_TCTL */
+	{OFFSET(mii1_rxdv), MODE(2) | RXACTIVE},				/* RGMII1_RCTL */
+	{OFFSET(mii1_txd3), MODE(2)},							/* RGMII1_TD3 */
+	{OFFSET(mii1_txd2), MODE(2)},							/* RGMII1_TD2 */
+	{OFFSET(mii1_txd1), MODE(2)},							/* RGMII1_TD1 */
+	{OFFSET(mii1_txd0), MODE(2)},							/* RGMII1_TD0 */
+	{OFFSET(mii1_txclk), MODE(2)},							/* RGMII1_TCLK */
+	{OFFSET(mii1_rxclk), MODE(2) | RXACTIVE},				/* RGMII1_RCLK */
+	{OFFSET(mii1_rxd3), MODE(2) | RXACTIVE},				/* RGMII1_RD3 */
+	{OFFSET(mii1_rxd2), MODE(2) | RXACTIVE},				/* RGMII1_RD2 */
+	{OFFSET(mii1_rxd1), MODE(2) | RXACTIVE},				/* RGMII1_RD1 */
+	{OFFSET(mii1_rxd0), MODE(2) | RXACTIVE},				/* RGMII1_RD0 */
+	{OFFSET(mdio_data), MODE(0) | RXACTIVE | PULLUP_EN},	/* MDIO_DATA */
+	{OFFSET(mdio_clk), MODE(0) | PULLUP_EN},				/* MDIO_CLK */
+	/*USB0*/
+	{OFFSET(usb0_drvvbus), MODE(0)},						/* USB0_DRVVBUS */
+	/*USB1*/
+	{OFFSET(usb1_drvvbus), MODE(0)},						/* USB0_DRVVBUS */
+	/*ADC*/
+	{OFFSET(ain0), MODE(0) | RXACTIVE},						/* AIN0 */
+	{OFFSET(ain1), MODE(0) | RXACTIVE},						/* AIN1 */
+	{OFFSET(ain2), MODE(0) | RXACTIVE},						/* AIN2 */
+	{OFFSET(ain3), MODE(0) | RXACTIVE},						/* AIN3 */
+	{OFFSET(ain4), MODE(0) | RXACTIVE},						/* AIN4 */
+	{OFFSET(ain5), MODE(0) | RXACTIVE},						/* AIN5 */
+	{OFFSET(vrefp), MODE(0) | RXACTIVE},					/* VREFP */
+	{OFFSET(vrefn), MODE(0) | RXACTIVE},					/* VREFN */
+	{-1},
+};
+#endif
+#if defined(CONFIG_SBC8600B)
+static struct module_pin_mux sbc8600b_pin_mux[] = {
+
+};
+#endif
 
 #if defined(CONFIG_NOR_BOOT)
 static struct module_pin_mux norboot_pin_mux[] = {
@@ -378,7 +581,23 @@ void enable_board_pin_mux(struct am335x_baseboard_id *header)
 		configure_module_pin_mux(mii1_pin_mux);
 		configure_module_pin_mux(mmc0_pin_mux);
 		configure_module_pin_mux(mmc1_pin_mux);
-	} else {
+	}
+#if defined(CONFIG_SQ)		
+	else if (board_is_sq(header)) {
+		configure_module_pin_mux(sq_pin_mux);
+	}
+#endif
+#if defined(CONFIG_DEVKIT8600)	
+	else if (board_is_devkit8600(header)) {
+		configure_module_pin_mux(devkit8600_pin_mux);
+	}
+#endif
+#if defined(CONFIG_SBC8600B)		
+	else if (board_is_sbc8600b(header)) {
+	configure_module_pin_mux(sbc8600b_pin_mux);
+	}
+#endif
+	 else {
 		puts("Unknown board, cannot configure pinmux.");
 		hang();
 	}

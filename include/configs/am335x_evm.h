@@ -386,7 +386,7 @@
 #define CONFIG_PHY_GIGE
 #define CONFIG_PHYLIB
 #define CONFIG_PHY_ADDR			0
-#define CONFIG_PHY_SMSC
+/*#define CONFIG_PHY_SMSC*/
 
 /* NAND support */
 #ifdef CONFIG_NAND

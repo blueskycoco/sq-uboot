@@ -28,6 +28,18 @@ struct am335x_baseboard_id {
 	char config[32];
 	char mac_addr[HDR_NO_OF_MAC_ADDR][HDR_ETH_ALEN];
 };
+static inline int board_is_sq(struct am335x_baseboard_id *header)
+{
+	return !strncmp(header->name, "sq", 2);
+}
+static inline int board_is_devkit8600(struct am335x_baseboard_id *header)
+{
+	return !strncmp(header->name, "devkit86", 8);
+}
+static inline int board_is_sbc8600b(struct am335x_baseboard_id *header)
+{
+	return !strncmp(header->name, "sbc8600b", 8);
+}
 
 static inline int board_is_bone(struct am335x_baseboard_id *header)
 {
