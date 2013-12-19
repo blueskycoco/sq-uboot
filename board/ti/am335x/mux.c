@@ -111,6 +111,7 @@ static struct module_pin_mux i2c0_pin_mux[] = {
 	{-1},
 };
 
+#if !defined(CONFIG_SQ) && !defined(CONFIG_SBC8600B) && !defined(CONFIG_DEVKIT8600)
 static struct module_pin_mux i2c1_pin_mux[] = {
 	{OFFSET(spi0_d1), (MODE(2) | RXACTIVE |
 			PULLUDEN | SLEWCTRL)},	/* I2C_DATA */
@@ -238,6 +239,7 @@ static struct module_pin_mux bone_norcape_pin_mux[] = {
 	{-1},
 };
 #endif
+#endif
 #if defined(CONFIG_SQ)
 static struct module_pin_mux sq_pin_mux[] = {
 	/*LCD*/
@@ -263,7 +265,7 @@ static struct module_pin_mux sq_pin_mux[] = {
 	{OFFSET(lcd_data15), MODE(0) | PULLUDEN},				/* LCD_DATA15 */	
 	{OFFSET(gpmc_ad14), MODE(1)}, 							/* LCD_DATA22 */
 	{OFFSET(gpmc_ad15), MODE(1)}, 							/* LCD_DATA23 */
-	/*NAND*/
+    /*NAND*/
 	{OFFSET(gpmc_ad0), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD0 */
 	{OFFSET(gpmc_ad1), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD1 */
 	{OFFSET(gpmc_ad2), (MODE(0) | PULLUP_EN | RXACTIVE)},	/* NAND AD2 */
@@ -353,7 +355,7 @@ static struct module_pin_mux sq_pin_mux[] = {
 	{OFFSET(gpmc_ad10), MODE(7)},							/* GPIO0_26	26	 ADC_PWR_ON */
 	{OFFSET(gpmc_ad8), MODE(7)},							/* GPIO0_22	22	 88E1111_RESET */
 	{OFFSET(gpmc_be1n), MODE(7)|RXACTIVE|PULLUP_EN},		/* GPIO0_19 	19	PWR_ON_OFF */
-	{-1},
+    {-1},
 };
 #endif
 #if defined(CONFIG_DEVKIT8600)
@@ -533,7 +535,9 @@ static unsigned short detect_daughter_board_profile(void)
 
 void enable_board_pin_mux(struct am335x_baseboard_id *header)
 {
-	/* Do board-specific muxes. */
+
+#if !defined(CONFIG_SQ) && !defined(CONFIG_SBC8600B) && !defined(CONFIG_DEVKIT8600)
+    /* Do board-specific muxes. */
 	if (board_is_bone(header)) {
 		/* Beaglebone pinmux */
 		configure_module_pin_mux(i2c1_pin_mux);
@@ -582,18 +586,19 @@ void enable_board_pin_mux(struct am335x_baseboard_id *header)
 		configure_module_pin_mux(mmc0_pin_mux);
 		configure_module_pin_mux(mmc1_pin_mux);
 	}
+#endif
 #if defined(CONFIG_SQ)		
-	else if (board_is_sq(header)) {
+	if (board_is_sq(header)) {
 		configure_module_pin_mux(sq_pin_mux);
 	}
 #endif
 #if defined(CONFIG_DEVKIT8600)	
-	else if (board_is_devkit8600(header)) {
+	if (board_is_devkit8600(header)) {
 		configure_module_pin_mux(devkit8600_pin_mux);
 	}
 #endif
 #if defined(CONFIG_SBC8600B)		
-	else if (board_is_sbc8600b(header)) {
+	if (board_is_sbc8600b(header)) {
 	configure_module_pin_mux(sbc8600b_pin_mux);
 	}
 #endif
