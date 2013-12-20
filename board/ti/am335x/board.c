@@ -671,10 +671,15 @@ int board_eth_init(bd_t *bis)
 	gpio_direction_output(13, 1);
 	gpio_request(22, "88e1111_reset");
 	gpio_direction_output(22, 1);
+	gpio_request(26, "usb2512_reset");
+	gpio_direction_output(22, 1);
+	gpio_direction_output(26, 1);
 	udelay(200);
 	gpio_direction_output(22,0);
+	gpio_direction_output(26,0);
 	udelay(200);
 	gpio_direction_output(22,1);
+	gpio_direction_output(26,1);
 	udelay(200);
 #endif
 #if (defined(CONFIG_DRIVER_TI_CPSW) && !defined(CONFIG_SPL_BUILD)) || \
