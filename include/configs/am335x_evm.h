@@ -385,8 +385,13 @@
 /* Network. */
 #define CONFIG_PHY_GIGE
 #define CONFIG_PHYLIB
+#ifdef CONFIG_SQ
+#define CONFIG_PHY_ADDR			4
+#else
 #define CONFIG_PHY_ADDR			0
-/*#define CONFIG_PHY_SMSC*/
+#define CONFIG_PHY_SMSC
+#endif
+
 
 /* NAND support */
 #ifdef CONFIG_NAND

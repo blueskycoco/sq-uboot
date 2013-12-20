@@ -514,6 +514,14 @@ const struct ctrl_ioregs ioregs = {
 	.dt1ioctl		= MT47H128M16RT25E_IOCTRL_VALUE,
 };
 
+const struct ctrl_ioregs ioregs_sq_devkit8600_sbc8600b = {
+	.cm0ioctl		= H5TQ2G83CFRH9C_IOCTRL_VALUE,
+	.cm1ioctl		= H5TQ2G83CFRH9C_IOCTRL_VALUE,
+	.cm2ioctl		= H5TQ2G83CFRH9C_IOCTRL_VALUE,
+	.dt0ioctl		= H5TQ2G83CFRH9C_IOCTRL_VALUE,
+	.dt1ioctl		= H5TQ2G83CFRH9C_IOCTRL_VALUE,
+};
+
 void sdram_init(void)
 {
 	__maybe_unused struct am335x_baseboard_id header;
@@ -542,7 +550,7 @@ void sdram_init(void)
 		config_ddr(303, &ioregs_evm15, &ddr3_evm_data,
 			   &ddr3_evm_cmd_ctrl_data, &ddr3_evm_emif_reg_data, 0);
 	else if(board_is_sq(&header)||board_is_devkit8600(&header)||board_is_sbc8600b(&header))
-		config_ddr(303, H5TQ2G83CFRH9C_IOCTRL_VALUE, &ddr3_sq_data,
+		config_ddr(303, &ioregs_sq_devkit8600_sbc8600b, &ddr3_sq_data,
 			   &ddr3_sq_cmd_ctrl_data, &ddr3_sq_emif_reg_data, 0);
 	else
 		config_ddr(266, &ioregs, &ddr2_data,
