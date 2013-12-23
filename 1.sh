@@ -11,3 +11,6 @@ if [[ $2 == c ]]; then
 fi
 
 make O=$1
+
+cp $1/u-boot.img /tftpboot/
+cp $1/MLO /tftpboot/
