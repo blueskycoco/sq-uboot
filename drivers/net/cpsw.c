@@ -912,14 +912,16 @@ static int cpsw_recv(struct eth_device *dev)
 {
 	struct cpsw_priv	*priv = dev->priv;
 	void *buffer;
-	int len;
+	int len,i;
 
 	cpsw_check_link(priv);
 
 	while (cpdma_process(priv, &priv->rx_chan, &buffer, &len) >= 0) {
 		invalidate_dcache_range((unsigned long)buffer,
 					(unsigned long)buffer + PKTSIZE_ALIGN);
-		NetReceive(buffer, len);
+	    for(i=0;i<len;i++)
+            printf("%x ",((unsigned char *)buffer)[i]);
+        NetReceive(buffer, len);
 		cpdma_submit(priv, &priv->rx_chan, buffer, PKTSIZE);
 	}
 
