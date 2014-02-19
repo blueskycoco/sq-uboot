@@ -44,6 +44,28 @@ static struct ctrl_dev *cdev = (struct ctrl_dev *)CTRL_DEVICE_BASE;
  */
 static int read_eeprom(struct am335x_baseboard_id *header)
 {
+#if defined(CONFIG_SQ)
+	strcpy(header->config,"sq board");
+	strcpy(header->mac_addr,"12:34:56:78:90:12");
+	header->magic=0x0001;
+	strcpy(header->name,"sq");
+	strcpy(header->serial,"00");
+	strcpy(header->version,"0.00");
+#elif defined(CONFIG_DEVKIT8600)
+	strcpy(header->config,"devkit8600 board");
+	strcpy(header->mac_addr,"12:34:56:78:90:12");
+	header->magic=0x0001;
+	strcpy(header->name,"devkit86");
+	strcpy(header->serial,"00");
+	strcpy(header->version,"0.00");
+#elif defined(CONFIG_SBC8600B)
+	strcpy(header->config,"sbc8600b board");
+	strcpy(header->mac_addr,"12:34:56:78:90:12");
+	header->magic=0x0001;
+	strcpy(header->name,"sbc8600b");
+	strcpy(header->serial,"00");
+	strcpy(header->version,"0.00");
+#else
 	/* Check if baseboard eeprom is available */
 	if (i2c_probe(CONFIG_SYS_I2C_EEPROM_ADDR)) {
 		puts("Could not probe the EEPROM; something fundamentally "
@@ -77,7 +99,7 @@ static int read_eeprom(struct am335x_baseboard_id *header)
 			return -EINVAL;
 		}
 	}
-
+#endif
 	return 0;
 }
 
@@ -215,6 +237,34 @@ static struct emif_regs ddr3_evm_emif_reg_data = {
 				PHY_EN_DYN_PWRDN,
 };
 
+static const struct ddr_data ddr3_sq_data = {
+	.datardsratio0 = H5TQ2G83CFRH9C_RD_DQS,
+	.datawdsratio0 = H5TQ2G83CFRH9C_WR_DQS,
+	.datafwsratio0 = H5TQ2G83CFRH9C_PHY_FIFO_WE,
+	.datawrsratio0 = H5TQ2G83CFRH9C_PHY_WR_DATA,
+};
+
+static const struct cmd_control ddr3_sq_cmd_ctrl_data = {
+	.cmd0csratio = H5TQ2G83CFRH9C_RATIO,
+	.cmd0iclkout = H5TQ2G83CFRH9C_INVERT_CLKOUT,
+
+	.cmd1csratio = H5TQ2G83CFRH9C_RATIO,
+	.cmd1iclkout = H5TQ2G83CFRH9C_INVERT_CLKOUT,
+
+	.cmd2csratio = H5TQ2G83CFRH9C_RATIO,
+	.cmd2iclkout = H5TQ2G83CFRH9C_INVERT_CLKOUT,
+};
+
+static struct emif_regs ddr3_sq_emif_reg_data = {
+	.sdram_config = H5TQ2G83CFRH9C_EMIF_SDCFG,
+	.ref_ctrl = H5TQ2G83CFRH9C_EMIF_SDREF,
+	.sdram_tim1 = H5TQ2G83CFRH9C_EMIF_TIM1,
+	.sdram_tim2 = H5TQ2G83CFRH9C_EMIF_TIM2,
+	.sdram_tim3 = H5TQ2G83CFRH9C_EMIF_TIM3,
+	.zq_config = H5TQ2G83CFRH9C_ZQ_CFG,
+	.emif_ddr_phy_ctlr_1 = H5TQ2G83CFRH9C_EMIF_READ_LATENCY/* |PHY_EN_DYN_PWRDN*/,
+};
+
 #ifdef CONFIG_SPL_OS_BOOT
 int spl_start_uboot(void)
 {
@@ -230,6 +280,8 @@ const struct dpll_params dpll_ddr_evm_sk = {
 		303, OSC-1, 1, -1, -1, -1, -1};
 const struct dpll_params dpll_ddr_bone_black = {
 		400, OSC-1, 1, -1, -1, -1, -1};
+const struct dpll_params dpll_ddr_sq_sbc8600b_devkit8600 = {
+		303, OSC-1, 1, -1, -1, -1, -1};
 
 void am33xx_spl_board_init(void)
 {
@@ -338,6 +390,8 @@ void am33xx_spl_board_init(void)
 			puts("tps65217_reg_write failure\n");
 	} else {
 		int sil_rev;
+		if(board_is_devkit8600(&header))
+		{
 
 		/*
 		 * The GP EVM, IDK and EVM SK use a TPS65910 PMIC.  For all
@@ -363,10 +417,10 @@ void am33xx_spl_board_init(void)
 		if (tps65910_voltage_update(MPU, mpu_vdd))
 			return;
 
-		/* Second, update the CORE voltage. */
-		if (tps65910_voltage_update(CORE, TPS65910_OP_REG_SEL_1_1_3))
-			return;
-
+			/* Second, update the CORE voltage. */
+			if (tps65910_voltage_update(CORE, TPS65910_OP_REG_SEL_1_1_3))
+				return;
+		}
 		/* Set CORE Frequencies to OPP100 */
 		do_setup_dpll(&dpll_core_regs, &dpll_core_opp100);
 	}
@@ -390,6 +444,8 @@ const struct dpll_params *get_dpll_ddr_params(void)
 		return &dpll_ddr_bone_black;
 	else if (board_is_evm_15_or_later(&header))
 		return &dpll_ddr_evm_sk;
+	else if(board_is_sq(&header)||board_is_sbc8600b(&header)||board_is_devkit8600(&header))
+		return &dpll_ddr_sq_sbc8600b_devkit8600;
 	else
 		return &dpll_ddr;
 }
@@ -458,6 +514,14 @@ const struct ctrl_ioregs ioregs = {
 	.dt1ioctl		= MT47H128M16RT25E_IOCTRL_VALUE,
 };
 
+const struct ctrl_ioregs ioregs_sq_devkit8600_sbc8600b = {
+	.cm0ioctl		= H5TQ2G83CFRH9C_IOCTRL_VALUE,
+	.cm1ioctl		= H5TQ2G83CFRH9C_IOCTRL_VALUE,
+	.cm2ioctl		= H5TQ2G83CFRH9C_IOCTRL_VALUE,
+	.dt0ioctl		= H5TQ2G83CFRH9C_IOCTRL_VALUE,
+	.dt1ioctl		= H5TQ2G83CFRH9C_IOCTRL_VALUE,
+};
+
 void sdram_init(void)
 {
 	__maybe_unused struct am335x_baseboard_id header;
@@ -485,6 +549,9 @@ void sdram_init(void)
 	else if (board_is_evm_15_or_later(&header))
 		config_ddr(303, &ioregs_evm15, &ddr3_evm_data,
 			   &ddr3_evm_cmd_ctrl_data, &ddr3_evm_emif_reg_data, 0);
+	else if(board_is_sq(&header)||board_is_devkit8600(&header)||board_is_sbc8600b(&header))
+		config_ddr(303, &ioregs_sq_devkit8600_sbc8600b, &ddr3_sq_data,
+			   &ddr3_sq_cmd_ctrl_data, &ddr3_sq_emif_reg_data, 0);
 	else
 		config_ddr(266, &ioregs, &ddr2_data,
 			   &ddr2_cmd_ctrl_data, &ddr2_emif_reg_data, 0);
@@ -504,7 +571,16 @@ int board_init(void)
 #if defined(CONFIG_NOR) || defined(CONFIG_NAND)
 	gpmc_init();
 #endif
-	return 0;
+#if defined(CONFIG_SQ)
+	gpio_request(26, "usb2512_reset");
+	gpio_direction_output(26,1);
+	udelay(200);
+	gpio_direction_output(26,0);
+	udelay(200);
+	gpio_direction_output(26,1);
+	udelay(200);
+#endif
+    return 0;
 }
 
 #ifdef CONFIG_BOARD_LATE_INIT
@@ -544,7 +620,11 @@ static struct cpsw_slave_data cpsw_slaves[] = {
 	{
 		.slave_reg_ofs	= 0x208,
 		.sliver_reg_ofs	= 0xd80,
-		.phy_id		= 0,
+#if defined(CONFIG_SQ)||defined(CONFIG_DEVKIT8600)||defined(CONFIG_SBC8600B)		
+		.phy_id	= 4,
+#else
+		.phy_id	= 0,
+#endif		
 	},
 	{
 		.slave_reg_ofs	= 0x308,
@@ -559,7 +639,11 @@ static struct cpsw_platform_data cpsw_data = {
 	.mdio_div		= 0xff,
 	.channels		= 8,
 	.cpdma_reg_ofs		= 0x800,
+#if defined(CONFIG_SQ)||defined(CONFIG_DEVKIT8600)||defined(CONFIG_SBC8600B)		
+	.slaves			= 1,//2
+#else
 	.slaves			= 1,
+#endif
 	.slave_data		= cpsw_slaves,
 	.ale_reg_ofs		= 0xd00,
 	.ale_entries		= 1024,
@@ -591,7 +675,17 @@ int board_eth_init(bd_t *bis)
 	mac_addr[3] = (mac_hi & 0xFF000000) >> 24;
 	mac_addr[4] = mac_lo & 0xFF;
 	mac_addr[5] = (mac_lo & 0xFF00) >> 8;
-
+#if defined(CONFIG_SQ)
+	gpio_request(13, "88e1111_pwr_on");
+	gpio_direction_output(13, 1);
+	gpio_request(22, "88e1111_reset");
+	gpio_direction_output(22, 1);
+	udelay(200);
+	gpio_direction_output(22,0);
+	udelay(200);
+	gpio_direction_output(22,1);
+	udelay(200);
+#endif
 #if (defined(CONFIG_DRIVER_TI_CPSW) && !defined(CONFIG_SPL_BUILD)) || \
 	(defined(CONFIG_SPL_ETH_SUPPORT) && defined(CONFIG_SPL_BUILD))
 	if (!getenv("ethaddr")) {
@@ -622,6 +716,7 @@ int board_eth_init(bd_t *bis)
 	else
 		n += rv;
 #endif
+#if !(defined(CONFIG_SQ)||defined(CONFIG_DEVKIT8600)||defined(CONFIG_SBC8600B))
 
 	/*
 	 *
@@ -645,6 +740,7 @@ int board_eth_init(bd_t *bis)
 				AR8051_RGMII_TX_CLK_DLY);
 	}
 #endif
+#endif	
 #if defined(CONFIG_USB_ETHER) && \
 	(!defined(CONFIG_SPL_BUILD) || defined(CONFIG_SPL_USBETH_SUPPORT))
 	if (is_valid_ether_addr(mac_addr))
