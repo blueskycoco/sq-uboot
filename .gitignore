@@ -5,7 +5,7 @@
 #
 # Normal rules
 #
-
+sq/
 *.rej
 *.orig
 *.a
