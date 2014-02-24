@@ -10,11 +10,18 @@ sq/
 *.orig
 *.a
 *.o
+*.o.*
+*.a
+*.s
 *.su
-*~
+*.mod.c
+*.i
+*.lst
+*.order
+*.elf
 *.swp
-*.patch
 *.bin
+*.patch
 *.cfgtmp
 *.dts.tmp
 
@@ -24,7 +31,6 @@ sq/
 #
 # Top-level generic files
 #
-
 /MLO*
 /SPL
 /System.map
@@ -45,26 +51,29 @@ sq/
 /u-boot.lds
 /u-boot.ubl
 /u-boot.ais
-/u-boot.dtb
 /u-boot.sb
+
+#
+# git files that we don't want to ignore even it they are dot-files
+#
+!.gitignore
+!.mailmap
 
 #
 # Generated files
 #
 
-*.depend*
 /LOG
 /errlog
 /reloc_off
 
-/spl/
 !/spl/Makefile
+/spl/*
 /tpl/
 
 /include/generated/
 /include/spl-autoconf.mk
 /include/tpl-autoconf.mk
-asm-offsets.s
 
 # stgit generated dirs
 patches-*
@@ -90,3 +99,7 @@ GPATH
 GRTAGS
 GSYMS
 GTAGS
+
+*.orig
+*~
+\#*#
