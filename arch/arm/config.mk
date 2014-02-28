@@ -17,7 +17,9 @@ endif
 
 LDFLAGS_FINAL += --gc-sections
 PLATFORM_RELFLAGS += -ffunction-sections -fdata-sections \
-		     -fno-common -ffixed-r9 -msoft-float
+		     -fno-common -ffixed-r9
+PLATFORM_RELFLAGS += $(call cc-option, -msoft-float) \
+      $(call cc-option,-mshort-load-bytes,$(call cc-option,-malignment-traps,))
 
 # Support generic board on ARM
 __HAVE_ARCH_GENERIC_BOARD := y
@@ -105,4 +107,8 @@ PLATFORM_CPPFLAGS += $(call cc-option, -mword-relocations)
 endif
 
 # limit ourselves to the sections we want in the .bin.
-OBJCFLAGS += -j .text -j .rodata -j .data -j .u_boot_list -j .rel.dyn
+ifdef CONFIG_ARM64
+OBJCFLAGS += -j .text -j .rodata -j .data -j .u_boot_list -j .rela.dyn
+else
+OBJCFLAGS += -j .text -j .rodata -j .hash -j .data -j .got.plt -j .u_boot_list -j .rel.dyn
+endif

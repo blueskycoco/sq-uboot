@@ -4,7 +4,7 @@
  * Lokesh Vutla	  <lokeshvutla@ti.com>
  *
  * Configuration settings for the TI DRA7XX board.
- * See omap5_common.h for omap5 common settings.
+ * See ti_omap5_common.h for omap5 common settings.
  *
  * SPDX-License-Identifier:	GPL-2.0+
  */
@@ -34,7 +34,18 @@
 
 #define CONFIG_SYS_OMAP_ABE_SYSCK
 
-#include <configs/omap5_common.h>
+/* Define the default GPT table for eMMC */
+#define PARTS_DEFAULT \
+	"uuid_disk=${uuid_gpt_disk};" \
+	"name=rootfs,start=2MiB,size=-,uuid=${uuid_gpt_rootfs}"
+
+#include <configs/ti_omap5_common.h>
+
+/* Enhance our eMMC support / experience. */
+#define CONFIG_CMD_GPT
+#define CONFIG_EFI_PARTITION
+#define CONFIG_PARTITION_UUIDS
+#define CONFIG_CMD_PART
 
 /* CPSW Ethernet */
 #define CONFIG_CMD_NET			/* 'bootp' and 'tftp' */
@@ -60,6 +71,7 @@
 #define CONFIG_SPI_FLASH_SPANSION
 #define CONFIG_CMD_SF
 #define CONFIG_CMD_SPI
+#define CONFIG_SPI_FLASH_BAR
 #define CONFIG_TI_SPI_MMAP
 #define CONFIG_SF_DEFAULT_SPEED                48000000
 #define CONFIG_DEFAULT_SPI_MODE                SPI_MODE_3
@@ -71,6 +83,8 @@
 #define CONFIG_SPL_SPI_BUS             0
 #define CONFIG_SPL_SPI_CS              0
 #define CONFIG_SYS_SPI_U_BOOT_OFFS     0x20000
+
+#define CONFIG_SUPPORT_EMMC_BOOT
 
 /* USB xHCI HOST */
 #define CONFIG_CMD_USB

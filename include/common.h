@@ -8,9 +8,6 @@
 #ifndef __COMMON_H_
 #define __COMMON_H_	1
 
-#undef	_LINUX_CONFIG_H
-#define _LINUX_CONFIG_H 1	/* avoid reading Linux autoconf.h file	*/
-
 #ifndef __ASSEMBLY__		/* put C only stuff in this section */
 
 typedef unsigned char		uchar;
@@ -305,9 +302,16 @@ int	checkdram     (void);
 int	last_stage_init(void);
 extern ulong monitor_flash_len;
 int mac_read_from_eeprom(void);
-extern u8 _binary_dt_dtb_start[];	/* embedded device tree blob */
+extern u8 __dtb_dt_begin[];	/* embedded device tree blob */
 int set_cpu_clk_info(void);
+#if defined(CONFIG_DISPLAY_CPUINFO)
 int print_cpuinfo(void);
+#else
+static inline int print_cpuinfo(void)
+{
+	return 0;
+}
+#endif
 int update_flash_size(int flash_size);
 
 /**
@@ -411,6 +415,9 @@ static inline int setenv_addr(const char *varname, const void *addr)
 #ifdef CONFIG_MIPS
 # include <asm/u-boot-mips.h>
 #endif /* CONFIG_MIPS */
+#ifdef CONFIG_ARC
+# include <asm/u-boot-arc.h>
+#endif /* CONFIG_ARC */
 
 #ifdef CONFIG_AUTO_COMPLETE
 int env_complete(char *var, int maxv, char *cmdv[], int maxsz, char *buf);
@@ -698,6 +705,10 @@ ulong get_ddr_freq(ulong);
 #if defined(CONFIG_MPC85xx)
 typedef MPC85xx_SYS_INFO sys_info_t;
 void	get_sys_info  ( sys_info_t * );
+#  if defined(CONFIG_OF_LIBFDT)
+	void ft_fixup_cpu(void *, u64);
+	void ft_fixup_num_cores(void *);
+#  endif
 #endif
 #if defined(CONFIG_MPC86xx)
 typedef MPC86xx_SYS_INFO sys_info_t;
@@ -959,6 +970,22 @@ static inline phys_addr_t map_to_sysmem(const void *ptr)
 #define DIV_ROUND(n,d)		(((n) + ((d)/2)) / (d))
 #define DIV_ROUND_UP(n,d)	(((n) + (d) - 1) / (d))
 #define roundup(x, y)		((((x) + ((y) - 1)) / (y)) * (y))
+
+/*
+ * Divide positive or negative dividend by positive divisor and round
+ * to closest integer. Result is undefined for negative divisors and
+ * for negative dividends if the divisor variable type is unsigned.
+ */
+#define DIV_ROUND_CLOSEST(x, divisor)(			\
+{							\
+	typeof(x) __x = x;				\
+	typeof(divisor) __d = divisor;			\
+	(((typeof(x))-1) > 0 ||				\
+	 ((typeof(divisor))-1) > 0 || (__x) > 0) ?	\
+		(((__x) + ((__d) / 2)) / (__d)) :	\
+		(((__x) - ((__d) / 2)) / (__d));	\
+}							\
+)
 
 #define ALIGN(x,a)		__ALIGN_MASK((x),(typeof(x))(a)-1)
 #define __ALIGN_MASK(x,mask)	(((x)+(mask))&~(mask))

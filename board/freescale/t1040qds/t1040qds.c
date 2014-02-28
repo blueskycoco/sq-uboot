@@ -223,6 +223,7 @@ void ft_board_setup(void *blob, bd_t *bd)
 
 #ifdef CONFIG_SYS_DPAA_FMAN
 	fdt_fixup_fman_ethernet(blob);
+	fdt_fixup_board_enet(blob);
 #endif
 }
 
@@ -238,4 +239,9 @@ void qixis_dump_switch(void)
 		QIXIS_WRITE(cms[0], i);
 		printf("SW%d = (0x%02x)\n", i, QIXIS_READ(cms[1]));
 	}
+}
+
+int board_need_mem_reset(void)
+{
+	return 1;
 }

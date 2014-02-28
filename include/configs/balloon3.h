@@ -61,7 +61,6 @@
  */
 #ifdef	CONFIG_CMD_KGDB
 #define	CONFIG_KGDB_BAUDRATE		230400	/* kgdb serial port speed */
-#define	CONFIG_KGDB_SER_INDEX		2	/* which serial port to use */
 #endif
 
 /*
@@ -85,7 +84,6 @@
  * Clock Configuration
  */
 #undef	CONFIG_SYS_CLKS_IN_HZ
-#define	CONFIG_SYS_HZ			1000
 #define	CONFIG_SYS_CPUSPEED		0x290		/* 520MHz */
 
 /*

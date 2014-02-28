@@ -5,12 +5,8 @@
 # SPDX-License-Identifier:	GPL-2.0+
 #
 
-# if defined(CONFIG_USB_GADGET) || defined(CONFIG_USB_ETHER)
-#   Everytime you forget how crufty makefiles can get things like
-#   this remind you...
-ifneq (,$(CONFIG_USB_GADGET)$(CONFIG_USB_ETHER))
-obj-y += epautoconf.o config.o usbstring.o
-endif
+obj-$(CONFIG_USB_GADGET) += epautoconf.o config.o usbstring.o
+obj-$(CONFIG_USB_ETHER) += epautoconf.o config.o usbstring.o
 
 # new USB gadget layer dependencies
 ifdef CONFIG_USB_GADGET
@@ -25,7 +21,7 @@ endif
 ifdef CONFIG_USB_ETHER
 obj-y += ether.o
 obj-$(CONFIG_USB_ETH_RNDIS) += rndis.o
-obj-$(CONFIG_MV_UDC)	+= mv_udc.o
+obj-$(CONFIG_CI_UDC)	+= ci_udc.o
 obj-$(CONFIG_CPU_PXA25X) += pxa25x_udc.o
 else
 # Devices not related to the new gadget layer depend on CONFIG_USB_DEVICE

@@ -141,7 +141,6 @@ Directory Hierarchy:
 	/s3c24x0	Files specific to Samsung S3C24X0 CPUs
       /arm926ejs	Files specific to ARM 926 CPUs
       /arm1136		Files specific to ARM 1136 CPUs
-      /ixp		Files specific to Intel XScale IXP CPUs
       /pxa		Files specific to Intel XScale PXA CPUs
       /sa1100		Files specific to Intel StrongARM SA1100 CPUs
     /lib		Architecture specific library files
@@ -423,6 +422,11 @@ The following options need to be configured:
 		CONFIG_SYS_FSL_DSP_CCSRBAR_DEFAULT
 		This value denotes start offset of DSP CCSR space.
 
+		CONFIG_SYS_FSL_SINGLE_SOURCE_CLK
+		Single Source Clock is clocking mode present in some of FSL SoC's.
+		In this mode, a single differential clock is used to supply
+		clocks to the sysclock, ddrclock and usbclock.
+
 - Generic CPU options:
 		CONFIG_SYS_BIG_ENDIAN, CONFIG_SYS_LITTLE_ENDIAN
 
@@ -466,6 +470,21 @@ The following options need to be configured:
 		CONFIG_SYS_FSL_DDR3
 		Board config to use DDR3. It can be enabled for SoCs with
 		Freescale DDR3 controllers.
+
+		CONFIG_SYS_FSL_IFC_BE
+		Defines the IFC controller register space as Big Endian
+
+		CONFIG_SYS_FSL_IFC_LE
+		Defines the IFC controller register space as Little Endian
+
+		CONFIG_SYS_FSL_PBL_PBI
+		It enables addition of RCW (Power on reset configuration) in built image.
+		Please refer doc/README.pblimage for more details
+
+		CONFIG_SYS_FSL_PBL_RCW
+		It adds PBI(pre-boot instructions) commands in u-boot build image.
+		PBI commands can be used to configure SoC before it starts the execution.
+		Please refer doc/README.pblimage for more details
 
 - Intel Monahans options:
 		CONFIG_SYS_MONAHANS_RUN_MODE_OSC_RATIO
@@ -882,6 +901,7 @@ The following options need to be configured:
 		CONFIG_CMD_BSP		* Board specific commands
 		CONFIG_CMD_BOOTD	  bootd
 		CONFIG_CMD_CACHE	* icache, dcache
+		CONFIG_CMD_CLK   	* clock command support
 		CONFIG_CMD_CONSOLE	  coninfo
 		CONFIG_CMD_CRC32	* crc32
 		CONFIG_CMD_DATE		* support for RTC, date/time...
@@ -902,6 +922,8 @@ The following options need to be configured:
 		CONFIG_CMD_EXPORTENV	* export the environment
 		CONFIG_CMD_EXT2		* ext2 command support
 		CONFIG_CMD_EXT4		* ext4 command support
+		CONFIG_CMD_FS_GENERIC	* filesystem commands (e.g. load, ls)
+					  that work for multiple fs types
 		CONFIG_CMD_SAVEENV	  saveenv
 		CONFIG_CMD_FDC		* Floppy Disk Support
 		CONFIG_CMD_FAT		* FAT command support
@@ -2751,6 +2773,12 @@ CBFS (Coreboot Filesystem) support
 		Define this option to use the Bank addr/Extended addr
 		support on SPI flashes which has size > 16Mbytes.
 
+		CONFIG_SF_DUAL_FLASH		Dual flash memories
+
+		Define this option to use dual flash support where two flash
+		memories can be connected with a given cs line.
+		currently Xilinx Zynq qspi support these type of connections.
+
 - SystemACE Support:
 		CONFIG_SYSTEMACE
 
@@ -2821,7 +2849,7 @@ CBFS (Coreboot Filesystem) support
 		CONFIG_RSA
 
 		This enables the RSA algorithm used for FIT image verification
-		in U-Boot. See doc/uImage/signature for more information.
+		in U-Boot. See doc/uImage.FIT/signature.txt for more information.
 
 		The signing part is build into mkimage regardless of this
 		option.
@@ -3266,6 +3294,9 @@ FIT uImage format:
 		CONFIG_SYS_NAND_ECCBYTES
 		Defines the size and behavior of the NAND that SPL uses
 		to read U-Boot
+
+		CONFIG_SPL_NAND_BOOT
+		Add support NAND boot
 
 		CONFIG_SYS_NAND_U_BOOT_OFFS
 		Location in NAND to read U-Boot from
@@ -5251,6 +5282,15 @@ when your kernel is intended to use an initial ramdisk:
 	Data Size:    566530 Bytes = 553.25 kB = 0.54 MB
 	Load Address: 0x00000000
 	Entry Point:  0x00000000
+
+The "dumpimage" is a tool to disassemble images built by mkimage. Its "-i"
+option performs the converse operation of the mkimage's second form (the "-d"
+option). Given an image built by mkimage, the dumpimage extracts a "data file"
+from the image:
+
+	tools/dumpimage -i image -p position data_file
+	  -i ==> extract from the 'image' a specific 'data_file', \
+	   indexed by 'position'
 
 
 Installing a Linux Image:

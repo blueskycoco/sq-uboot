@@ -60,6 +60,11 @@ static unsigned long long notrace tick_to_time(uint64_t tick)
 	return tick;
 }
 
+int __weak timer_init(void)
+{
+	return 0;
+}
+
 ulong __weak get_timer(ulong base)
 {
 	return tick_to_time(get_ticks()) - base;
@@ -71,8 +76,8 @@ unsigned long __weak notrace timer_get_us(void)
 }
 static unsigned long long usec_to_tick(unsigned long usec)
 {
-	uint64_t tick = usec * get_tbclk();
-	usec *= get_tbclk();
+	uint64_t tick = usec;
+	tick *= get_tbclk();
 	do_div(tick, 1000000);
 	return tick;
 }

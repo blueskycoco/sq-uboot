@@ -187,6 +187,9 @@
 #define EXT_CSD_BOOT_PART_NUM(x)	(x << 3)
 #define EXT_CSD_PARTITION_ACCESS(x)	(x << 0)
 
+#define EXT_CSD_BOOT_BUS_WIDTH_MODE(x)	(x << 3)
+#define EXT_CSD_BOOT_BUS_WIDTH_RESET(x)	(x << 2)
+#define EXT_CSD_BOOT_BUS_WIDTH_WIDTH(x)	(x)
 
 #define R1_ILLEGAL_COMMAND		(1 << 22)
 #define R1_APP_CMD			(1 << 5)
@@ -262,6 +265,8 @@ struct mmc {
 	uint card_caps;
 	uint host_caps;
 	uint ocr;
+	uint dsr;
+	uint dsr_imp;
 	uint scr[2];
 	uint csd[4];
 	uint cid[4];
@@ -304,12 +309,14 @@ int board_mmc_getcd(struct mmc *mmc);
 int mmc_switch_part(int dev_num, unsigned int part_num);
 int mmc_getcd(struct mmc *mmc);
 int mmc_getwp(struct mmc *mmc);
-void spl_mmc_load(void) __noreturn;
+int mmc_set_dsr(struct mmc *mmc, u16 val);
 /* Function to change the size of boot partition and rpmb partitions */
 int mmc_boot_partition_size_change(struct mmc *mmc, unsigned long bootsize,
 					unsigned long rpmbsize);
-/* Function to send commands to open/close the specified boot partition */
-int mmc_boot_part_access(struct mmc *mmc, u8 ack, u8 part_num, u8 access);
+/* Function to modify the PARTITION_CONFIG field of EXT_CSD */
+int mmc_set_part_conf(struct mmc *mmc, u8 ack, u8 part_num, u8 access);
+/* Function to modify the BOOT_BUS_WIDTH field of EXT_CSD */
+int mmc_set_boot_bus_width(struct mmc *mmc, u8 width, u8 reset, u8 mode);
 
 /**
  * Start device initialization and return immediately; it does not block on

@@ -21,6 +21,7 @@ obj-$(CONFIG_BZIP2) += bzlib_randtable.o
 obj-$(CONFIG_BZIP2) += bzlib_huffman.o
 obj-$(CONFIG_USB_TTY) += circbuf.o
 obj-y += crc7.o
+obj-y += crc8.o
 obj-y += crc16.o
 obj-$(CONFIG_OF_CONTROL) += fdtdec.o
 obj-$(CONFIG_TEST_FDTDEC) += fdtdec_test.o
@@ -66,4 +67,4 @@ obj-$(CONFIG_BOOTP_RANDOM_DELAY) += rand.o
 obj-$(CONFIG_CMD_LINK_LOCAL) += rand.o
 
 # SEE README.arm-unaligned-accesses
-$(obj)bzlib.o: CFLAGS += $(PLATFORM_NO_UNALIGNED)
+CFLAGS_bzlib.o := $(PLATFORM_NO_UNALIGNED)

@@ -35,7 +35,6 @@
  * High Level Configuration Options
  */
 #define CONFIG_E300		1 /* E300 family */
-#define CONFIG_MPC83xx		1 /* MPC83xx family */
 #define CONFIG_MPC831x		1 /* MPC831x CPU family */
 #define CONFIG_MPC8315		1 /* MPC8315 CPU specific */
 #define CONFIG_MPC8315ERDB	1 /* MPC8315ERDB board specific */
@@ -634,7 +633,6 @@
 
 #if defined(CONFIG_CMD_KGDB)
 #define CONFIG_KGDB_BAUDRATE	230400	/* speed of kgdb serial port */
-#define CONFIG_KGDB_SER_INDEX	2	/* which serial port to use */
 #endif
 
 /*

@@ -10,9 +10,10 @@
 extern void zynq_slcr_lock(void);
 extern void zynq_slcr_unlock(void);
 extern void zynq_slcr_cpu_reset(void);
-extern void zynq_slcr_gem_clk_setup(u32 gem_id, u32 rclk, u32 clk);
+extern void zynq_slcr_gem_clk_setup(u32 gem_id, unsigned long clk_rate);
 extern void zynq_slcr_devcfg_disable(void);
 extern void zynq_slcr_devcfg_enable(void);
+extern u32 zynq_slcr_get_boot_mode(void);
 extern u32 zynq_slcr_get_idcode(void);
 extern void zynq_ddrc_init(void);
 

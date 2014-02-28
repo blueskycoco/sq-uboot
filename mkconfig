@@ -23,7 +23,7 @@ options=""
 
 if [ \( $# -eq 2 \) -a \( "$1" = "-A" \) ] ; then
 	# Automatic mode
-	line=`awk '($0 !~ /^#/ && $7 ~ /^'"$2"'$/) { print $1, $2, $3, $4, $5, $6, $7, $8 }' boards.cfg`
+	line=`awk '($0 !~ /^#/ && $7 ~ /^'"$2"'$/) { print $1, $2, $3, $4, $5, $6, $7, $8 }' $srctree/boards.cfg`
 	if [ -z "$line" ] ; then
 		echo "make: *** No rule to make target \`$2_config'.  Stop." >&2
 		exit 1
@@ -83,6 +83,13 @@ fi
 if [ "${ARCH}" -a "${ARCH}" != "${arch}" ]; then
 	echo "Failed: \$ARCH=${ARCH}, should be '${arch}' for ${BOARD_NAME}" 1>&2
 	exit 1
+fi
+
+#
+# Test above needed aarch64, now we need arm
+#
+if [ "${arch}" = "aarch64" ]; then
+	arch="arm"
 fi
 
 if [ "$options" ] ; then

@@ -8,6 +8,7 @@
 #include <asm/io.h>
 #include <malloc.h>
 #include <asm/arch/hardware.h>
+#include <asm/arch/clk.h>
 
 #define SLCR_LOCK_MAGIC		0x767B
 #define SLCR_UNLOCK_MAGIC	0xDF0D
@@ -50,8 +51,10 @@ void zynq_slcr_cpu_reset(void)
 }
 
 /* Setup clk for network */
-void zynq_slcr_gem_clk_setup(u32 gem_id, u32 rclk, u32 clk)
+void zynq_slcr_gem_clk_setup(u32 gem_id, unsigned long clk_rate)
 {
+	int ret;
+
 	zynq_slcr_unlock();
 
 	if (gem_id > 1) {
@@ -59,16 +62,16 @@ void zynq_slcr_gem_clk_setup(u32 gem_id, u32 rclk, u32 clk)
 		goto out;
 	}
 
+	ret = zynq_clk_set_rate(gem0_clk + gem_id, clk_rate);
+	if (ret)
+		goto out;
+
 	if (gem_id) {
-		/* Set divisors for appropriate frequency in GEM_CLK_CTRL */
-		writel(clk, &slcr_base->gem1_clk_ctrl);
 		/* Configure GEM_RCLK_CTRL */
-		writel(rclk, &slcr_base->gem1_rclk_ctrl);
+		writel(1, &slcr_base->gem1_rclk_ctrl);
 	} else {
-		/* Set divisors for appropriate frequency in GEM_CLK_CTRL */
-		writel(clk, &slcr_base->gem0_clk_ctrl);
 		/* Configure GEM_RCLK_CTRL */
-		writel(rclk, &slcr_base->gem0_rclk_ctrl);
+		writel(1, &slcr_base->gem0_rclk_ctrl);
 	}
 	udelay(100000);
 out:
@@ -99,6 +102,12 @@ void zynq_slcr_devcfg_enable(void)
 	writel(0x0, &slcr_base->fpga_rst_ctrl);
 
 	zynq_slcr_lock();
+}
+
+u32 zynq_slcr_get_boot_mode(void)
+{
+	/* Get the bootmode register value */
+	return readl(&slcr_base->boot_mode);
 }
 
 u32 zynq_slcr_get_idcode(void)
