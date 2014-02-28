@@ -5,6 +5,8 @@
 #
 # Normal rules
 #
+devkit8600/
+sbc8600b/
 sq/
 *.rej
 *.orig
