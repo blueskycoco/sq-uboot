@@ -716,7 +716,7 @@ int board_eth_init(bd_t *bis)
 	else
 		n += rv;
 #endif
-#if !(defined(CONFIG_SQ)||defined(CONFIG_DEVKIT8600)||defined(CONFIG_SBC8600B))
+#if !(defined(CONFIG_SQ))
 
 	/*
 	 *
@@ -730,13 +730,13 @@ int board_eth_init(bd_t *bis)
 #define AR8051_DEBUG_RGMII_CLK_DLY_REG	0x5
 #define AR8051_RGMII_TX_CLK_DLY		0x100
 
-	if (board_is_evm_sk(&header) || board_is_gp_evm(&header)) {
+	if (board_is_evm_sk(&header) || board_is_gp_evm(&header) || board_is_devkit8600(&header)) {
 		const char *devname;
 		devname = miiphy_get_current_dev();
 
-		miiphy_write(devname, 0x0, AR8051_PHY_DEBUG_ADDR_REG,
+		miiphy_write(devname, 0x4, AR8051_PHY_DEBUG_ADDR_REG,
 				AR8051_DEBUG_RGMII_CLK_DLY_REG);
-		miiphy_write(devname, 0x0, AR8051_PHY_DEBUG_DATA_REG,
+		miiphy_write(devname, 0x4, AR8051_PHY_DEBUG_DATA_REG,
 				AR8051_RGMII_TX_CLK_DLY);
 	}
 #endif
