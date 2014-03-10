@@ -283,6 +283,23 @@ const struct dpll_params dpll_ddr_bone_black = {
 const struct dpll_params dpll_ddr_sq_sbc8600b_devkit8600 = {
 		303, OSC-1, 1, -1, -1, -1, -1};
 
+int tps65910_set_1_5v(void)
+{
+	int ret;
+	uchar buf;
+
+	/* VDD1/2 voltage selection register access by control i/f */
+	ret = i2c_read(TPS65910_CTRL_I2C_ADDR, 0x20, 1,
+		       &buf, 1);
+    printf("Before set %x\r\n",buf);
+	if (ret)
+		return ret;
+
+	buf &= ~(0x3 << 2);
+
+	return i2c_write(TPS65910_CTRL_I2C_ADDR, 0x20, 1,
+			 &buf, 1);
+}
 void am33xx_spl_board_init(void)
 {
 	struct am335x_baseboard_id header;
@@ -412,7 +429,7 @@ void am33xx_spl_board_init(void)
 
 		/* Tell the TPS65910 to use i2c */
 		tps65910_set_i2c_control();
-
+        tps65910_set_1_5v();
 		/* First update MPU voltage. */
 		if (tps65910_voltage_update(MPU, mpu_vdd))
 			return;
