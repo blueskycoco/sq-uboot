@@ -52,15 +52,12 @@ typedef volatile unsigned char	vu_char;
 #include <mpc5xxx.h>
 #elif defined(CONFIG_MPC512X)
 #include <asm/immap_512x.h>
-#elif defined(CONFIG_8260)
+#elif defined(CONFIG_MPC8260)
 #if   defined(CONFIG_MPC8247) \
    || defined(CONFIG_MPC8248) \
    || defined(CONFIG_MPC8271) \
    || defined(CONFIG_MPC8272)
 #define CONFIG_MPC8272_FAMILY	1
-#endif
-#if defined(CONFIG_MPC8272_FAMILY)
-#define CONFIG_MPC8260	1
 #endif
 #include <asm/immap_8260.h>
 #endif
@@ -95,6 +92,10 @@ typedef volatile unsigned char	vu_char;
 #include <part.h>
 #include <flash.h>
 #include <image.h>
+
+#ifdef __LP64__
+#define CONFIG_SYS_SUPPORT_64BIT_DATA
+#endif
 
 #ifdef DEBUG
 #define _DEBUG	1
@@ -461,6 +462,7 @@ void	api_init (void);
 
 /* common/memsize.c */
 long	get_ram_size  (long *, long);
+phys_size_t get_effective_memsize(void);
 
 /* $(BOARD)/$(BOARD).c */
 void	reset_phy     (void);
@@ -664,7 +666,7 @@ int	get_clocks (void);
 int	get_clocks_866 (void);
 int	sdram_adjust_866 (void);
 int	adjust_sdram_tbs_8xx (void);
-#if defined(CONFIG_8260)
+#if defined(CONFIG_MPC8260)
 int	prt_8260_clks (void);
 #elif defined(CONFIG_MPC5xxx)
 int	prt_mpc5xxx_clks (void);
@@ -732,7 +734,7 @@ void	get_sys_info  ( sys_info_t * );
 #endif
 
 /* $(CPU)/cpu_init.c */
-#if defined(CONFIG_8xx) || defined(CONFIG_8260)
+#if defined(CONFIG_8xx) || defined(CONFIG_MPC8260)
 void	cpu_init_f    (volatile immap_t *immr);
 #endif
 #if defined(CONFIG_4xx) || defined(CONFIG_MPC85xx) || defined(CONFIG_MCF52x2) ||defined(CONFIG_MPC86xx)
@@ -740,7 +742,7 @@ void	cpu_init_f    (void);
 #endif
 
 int	cpu_init_r    (void);
-#if defined(CONFIG_8260)
+#if defined(CONFIG_MPC8260)
 int	prt_8260_rsr  (void);
 #elif defined(CONFIG_MPC83xx)
 int	prt_83xx_rsr  (void);
