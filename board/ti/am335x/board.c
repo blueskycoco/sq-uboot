@@ -283,6 +283,23 @@ const struct dpll_params dpll_ddr_bone_black = {
 const struct dpll_params dpll_ddr_sq_sbc8600b_devkit8600 = {
 		303, OSC-1, 1, -1, -1, -1, -1};
 
+int tps65910_set_1_5v(void)
+{
+	int ret;
+	uchar buf;
+
+	/* VDD1/2 voltage selection register access by control i/f */
+	ret = i2c_read(TPS65910_CTRL_I2C_ADDR, 0x20, 1,
+		       &buf, 1);
+    printf("Before set %x\r\n",buf);
+	if (ret)
+		return ret;
+
+	buf &= ~(0x3 << 2);
+
+	return i2c_write(TPS65910_CTRL_I2C_ADDR, 0x20, 1,
+			 &buf, 1);
+}
 void am33xx_spl_board_init(void)
 {
 	struct am335x_baseboard_id header;
@@ -412,7 +429,7 @@ void am33xx_spl_board_init(void)
 
 		/* Tell the TPS65910 to use i2c */
 		tps65910_set_i2c_control();
-
+        tps65910_set_1_5v();
 		/* First update MPU voltage. */
 		if (tps65910_voltage_update(MPU, mpu_vdd))
 			return;
@@ -731,7 +748,7 @@ int board_eth_init(bd_t *bis)
 	else
 		n += rv;
 #endif
-#if !(defined(CONFIG_SQ)||defined(CONFIG_DEVKIT8600)||defined(CONFIG_SBC8600B))
+#if !(defined(CONFIG_SQ))
 
 	/*
 	 *
@@ -745,13 +762,13 @@ int board_eth_init(bd_t *bis)
 #define AR8051_DEBUG_RGMII_CLK_DLY_REG	0x5
 #define AR8051_RGMII_TX_CLK_DLY		0x100
 
-	if (board_is_evm_sk(&header) || board_is_gp_evm(&header)) {
+	if (board_is_evm_sk(&header) || board_is_gp_evm(&header) || board_is_devkit8600(&header)) {
 		const char *devname;
 		devname = miiphy_get_current_dev();
 
-		miiphy_write(devname, 0x0, AR8051_PHY_DEBUG_ADDR_REG,
+		miiphy_write(devname, 0x4, AR8051_PHY_DEBUG_ADDR_REG,
 				AR8051_DEBUG_RGMII_CLK_DLY_REG);
-		miiphy_write(devname, 0x0, AR8051_PHY_DEBUG_DATA_REG,
+		miiphy_write(devname, 0x4, AR8051_PHY_DEBUG_DATA_REG,
 				AR8051_RGMII_TX_CLK_DLY);
 	}
 #endif
