@@ -638,9 +638,9 @@ static struct cpsw_slave_data cpsw_slaves[] = {
 		.slave_reg_ofs	= 0x208,
 		.sliver_reg_ofs	= 0xd80,
 #if defined(CONFIG_SQ)||defined(CONFIG_DEVKIT8600)||defined(CONFIG_SBC8600B)		
-		.phy_id	= 4,
+		.phy_addr	= 4,
 #else
-		.phy_id	= 0,
+		.phy_addr	= 0,
 #endif		
 	},
 	{
